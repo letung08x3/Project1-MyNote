@@ -1,5 +1,7 @@
 package com.example.project1mynote.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +15,23 @@ import java.time.LocalDateTime;
 @Table(name = "notes")
 @Getter
 @Setter
-@ToString
 public class Notes {
+    @Override
+    public String toString() {
+        return "Notes{" +
+                "id=" + id +
+//                ", user=" + user +
+                ", category=" + category +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", reminderEnabled=" + reminderEnabled +
+                ", reminderDate=" + reminderDate +
+                ", isPinned=" + isPinned +
+                ", repeatInterval=" + (repeatInterval != null ? repeatInterval.toString() : "null") +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                '}';
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +39,8 @@ public class Notes {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @ManyToOne
